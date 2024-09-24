@@ -14,7 +14,7 @@ export const Container = styled('div', {
   '@media(max-width: 768px)': {
     justifyContent: 'center',
 
-    padding: '0 $10',
+    padding: '0 $4',
   },
 })
 

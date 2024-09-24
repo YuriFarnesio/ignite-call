@@ -6,7 +6,7 @@ import { z } from 'zod'
 
 import { Form, FormAnnotation } from './styles'
 
-const ClaimUsernameFormSchema = z.object({
+const claimUsernameFormSchema = z.object({
   username: z
     .string()
     .min(3, { message: 'O usuário precisa ter pelo menos 3 letras.' })
@@ -16,7 +16,7 @@ const ClaimUsernameFormSchema = z.object({
     .transform((username) => username.toLowerCase()),
 })
 
-type ClaimUsernameFormData = z.infer<typeof ClaimUsernameFormSchema>
+type ClaimUsernameFormData = z.infer<typeof claimUsernameFormSchema>
 
 export function ClaimUsernameForm() {
   const {
@@ -24,7 +24,7 @@ export function ClaimUsernameForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<ClaimUsernameFormData>({
-    resolver: zodResolver(ClaimUsernameFormSchema),
+    resolver: zodResolver(claimUsernameFormSchema),
   })
 
   async function handleClaimUsername(data: ClaimUsernameFormData) {
