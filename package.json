@@ -12,6 +12,7 @@
     "@hookform/resolvers": "^3.9.0",
     "@ignite-ui/react": "^2.2.4",
     "@phosphor-icons/react": "^2.1.7",
+    "@prisma/client": "^5.20.0",
     "next": "14.2.13",
     "react": "^18",
     "react-dom": "^18",
@@ -25,6 +26,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
+    "prisma": "^5.20.0",
     "typescript": "^5"
   }
 }
