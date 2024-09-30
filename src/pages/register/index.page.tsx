@@ -69,13 +69,14 @@ export default function Register() {
           Precisamos de algumas informações para criar seu perfil! Ah, você pode
           editar essas informações depois.
         </Text>
+
         <MultiStep size={4} currentStep={1} />
       </Header>
 
       <Form as="form" onSubmit={handleSubmit(handleRegister)}>
         <label>
           <Text size="sm">Nome de usuário</Text>
-          {/* @ts-expect-error: Unreachable code error */}
+          {/* @ts-expect-error: Wrong type in @ignite-ui/react */}
           <TextInput
             prefix="ignite.com/"
             placeholder="seu-usuário"
@@ -89,7 +90,7 @@ export default function Register() {
 
         <label>
           <Text size="sm">Nome completo</Text>
-          {/* @ts-expect-error: Unreachable code error */}
+          {/* @ts-expect-error: Wrong type in @ignite-ui/react */}
           <TextInput placeholder="Seu nome" {...register('name')} />
 
           {errors.name && (

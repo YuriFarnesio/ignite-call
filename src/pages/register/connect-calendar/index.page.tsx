@@ -25,6 +25,7 @@ export default function ConnectCalendar() {
           Conecte o seu calendário para verificar automaticamente as horas
           ocupadas e os novos eventos à medida em que são agendados.
         </Text>
+
         <MultiStep size={4} currentStep={2} />
       </Header>
 

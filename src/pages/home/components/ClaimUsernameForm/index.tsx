@@ -39,7 +39,7 @@ export function ClaimUsernameForm() {
   return (
     <>
       <Form as="form" onSubmit={handleSubmit(handleClaimUsername)}>
-        {/* @ts-expect-error: Unreachable code error */}
+        {/* @ts-expect-error: Wrong type in @ignite-ui/react */}
         <TextInput
           size="sm"
           prefix="ignite.com/"
