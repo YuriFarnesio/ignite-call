@@ -1,12 +1,12 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse, NextPageContext } from 'next'
 import type { Adapter, AdapterAccount, AdapterUser } from 'next-auth/adapters'
 import { destroyCookie, parseCookies } from 'nookies'
 
 import { prisma } from '../prisma'
 
 export function PrismaAdapter(
-  req: NextApiRequest,
-  res: NextApiResponse,
+  req: NextApiRequest | NextPageContext['req'],
+  res: NextApiResponse | NextPageContext['res'],
 ): Adapter {
   return {
     async createUser(user: AdapterUser) {
@@ -17,13 +17,13 @@ export function PrismaAdapter(
       }
 
       const prismaUser = await prisma.user.update({
+        where: {
+          id: userIdOnCookies,
+        },
         data: {
           name: user.name,
           email: user.email,
           avatar_url: user.avatar_url,
-        },
-        where: {
-          id: userIdOnCookies,
         },
       })
 
@@ -203,12 +203,12 @@ export function PrismaAdapter(
 
     async updateSession({ sessionToken, userId, expires }) {
       const prismaSession = await prisma.session.update({
+        where: {
+          session_token: sessionToken,
+        },
         data: {
           user_id: userId,
           expires,
-        },
-        where: {
-          session_token: sessionToken,
         },
       })
 
