@@ -60,6 +60,7 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
     const dateWithTime = dayjs(selectedDate)
       .set('hour', truncatedHour)
       .set('minute', minutes)
+      .startOf('minute')
       .toDate()
 
     onSelectDateTime(dateWithTime)
