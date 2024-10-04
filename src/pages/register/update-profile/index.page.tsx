@@ -21,11 +21,11 @@ import { buildNextAuthOptions } from '@/pages/api/auth/[...nextauth].api'
 import { Container, Header } from '../styles'
 import { FormAnnotation, ProfileBox } from './styles'
 
-const updateProfileSchema = z.object({
+const updateProfileFormSchema = z.object({
   bio: z.string(),
 })
 
-type UpdateProfileData = z.infer<typeof updateProfileSchema>
+type UpdateProfileFormData = z.infer<typeof updateProfileFormSchema>
 
 export default function UpdateProfile() {
   const router = useRouter()
@@ -35,16 +35,19 @@ export default function UpdateProfile() {
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<UpdateProfileData>({
-    resolver: zodResolver(updateProfileSchema),
+  } = useForm<UpdateProfileFormData>({
+    resolver: zodResolver(updateProfileFormSchema),
   })
 
-  async function handleUpdateProfile(data: UpdateProfileData) {
+  const avatarUrl = session.data?.user.avatar_url ?? ''
+  const username = session.data?.user.username ?? ''
+
+  async function handleUpdateProfile(data: UpdateProfileFormData) {
     await api.put('/users/profile', {
       bio: data.bio,
     })
 
-    await router.push(`/schedule/${session.data?.user.username}`)
+    await router.push(`/schedule/${username}`)
   }
 
   return (
@@ -53,11 +56,8 @@ export default function UpdateProfile() {
 
       <Container>
         <Header>
-          <Heading as="strong">Bem-vindo ao Ignite Call!</Heading>
-          <Text>
-            Precisamos de algumas informações para criar seu perfil! Ah, você
-            pode editar essas informações depois.
-          </Text>
+          <Heading as="strong">Defina sua disponibilidade</Heading>
+          <Text>Por último, uma breve descrição e uma foto de perfil.</Text>
 
           <MultiStep size={4} currentStep={4} />
         </Header>
@@ -67,15 +67,17 @@ export default function UpdateProfile() {
             <Text>Foto de perfil</Text>
             <Avatar
               // @ts-expect-error: Wrong type in @ignite-ui/react
-              src={session.data?.user.avatar_url}
+              src={avatarUrl}
               referrerPolicy="no-referrer"
-              alt={session.data?.user.name}
+              alt={username}
             />
           </label>
-
           <label>
             <Text size="sm">Sobre você</Text>
-            <TextArea {...register('bio')} />
+            <TextArea
+              placeholder="Fale um pouco mais sobre você..."
+              {...register('bio')}
+            />
             <FormAnnotation size="sm">
               Fale um pouco sobre você. Isto será exibido em sua página pessoal.
             </FormAnnotation>
@@ -97,7 +99,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     res,
     buildNextAuthOptions(req, res),
   )
-
   return {
     props: {
       session,
