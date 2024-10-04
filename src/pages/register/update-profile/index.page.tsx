@@ -99,6 +99,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     res,
     buildNextAuthOptions(req, res),
   )
+
   return {
     props: {
       session,
