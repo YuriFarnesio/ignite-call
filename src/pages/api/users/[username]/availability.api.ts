@@ -37,14 +37,6 @@ export default async function handler(
   const referenceDate = dayjs(String(date))
   const isPastDate = referenceDate.endOf('day').isBefore(new Date())
 
-  const timezoneOffsetInHours =
-    typeof timezoneOffset === 'string'
-      ? Number(timezoneOffset) / 60
-      : Number(timezoneOffset[0]) / 60
-
-  const referenceDateTimezoneOffsetInHours =
-    referenceDate.toDate().getTimezoneOffset() / 60
-
   if (isPastDate) {
     return res.json({ possibleTimes: [], availableTimes: [] })
   }
@@ -78,14 +70,8 @@ export default async function handler(
     where: {
       user_id: user.id,
       date: {
-        gte: referenceDate
-          .set('hour', startHour)
-          .add(timezoneOffsetInHours, 'hours')
-          .toDate(),
-        lte: referenceDate
-          .set('hour', endHour)
-          .add(timezoneOffsetInHours, 'hours')
-          .toDate(),
+        gte: referenceDate.set('hour', startHour).toDate(),
+        lte: referenceDate.set('hour', endHour).toDate(),
       },
     },
   })
@@ -93,16 +79,11 @@ export default async function handler(
   const availableTimes = possibleTimes.filter((time) => {
     const isTimeBlocked = blockedTimes.some(
       (blockedTime) =>
-        blockedTime.date.getHours() +
-          blockedTime.date.getMinutes() / 60 -
-          timezoneOffsetInHours ===
+        blockedTime.date.getHours() + blockedTime.date.getMinutes() / 60 ===
         time,
     )
 
-    const isTimeInPast = referenceDate
-      .set('hour', time)
-      .subtract(referenceDateTimezoneOffsetInHours, 'hours')
-      .isBefore(new Date())
+    const isTimeInPast = referenceDate.set('hour', time).isBefore(new Date())
 
     return !isTimeBlocked && !isTimeInPast
   })
